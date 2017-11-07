@@ -8,16 +8,10 @@ class Config(object):
         self._registry = {}
 
     def __getattr__(self, key):
-        if key in self._registry:
-            defaults = self._registry[key]['defaults']
-            setting, created = Settings.objects.get_or_create(key=key, defaults=defaults)
-        else:
-            raise ImproperlyConfigured(
-                "Setting '%s' has not been registered." % (key,)
-            )
+        setting = self.get_setting(key)
         return setting.value
 
-    def register(self, key, default=None, verbose_name=None):
+    def register(self, key, default=None, verbose_name=None, field_class=None):
         '''
         Register a setting
         '''
@@ -27,4 +21,13 @@ class Config(object):
                 % (key, self.__class__.__name__)
             )
         defaults = dict(value=default, verbose_name=verbose_name)
-        self._registry[key] = dict(defaults=defaults)
+        self._registry[key] = dict(defaults=defaults, field_class=field_class)
+
+    def get_setting(self, key):
+        if key in self._registry:
+            defaults = self._registry[key]['defaults']
+            setting, created = Settings.objects.get_or_create(key=key, defaults=defaults)
+            return setting
+        raise ImproperlyConfigured(
+            "Setting '%s' has not been registered." % (key,)
+        )

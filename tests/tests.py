@@ -3,9 +3,11 @@ from decimal import Decimal
 from django.test import TestCase
 from django.db.utils import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist, ImproperlyConfigured
+from django import forms
 
 from django_lindau.models import Settings
 from django_lindau import config
+from django_lindau.forms import SettingsForm
 
 class SettingsModel(TestCase):
 
@@ -55,4 +57,23 @@ class ConfigTest(TestCase):
         self.assertEqual(config.name, 'Tim')
         self.assertEqual(config.number, 10)
         self.assertEqual(config.float, 6.66)
-        self.assertEqual(config.decimal, Decimal('7.50'))        
+        self.assertEqual(config.decimal, Decimal('7.50'))   
+
+class Form(TestCase):
+
+    def test_default_fields(self):
+        form = SettingsForm()
+        fields = form.fields
+
+        self.assertIsInstance(fields['name'], forms.CharField)
+        self.assertIsInstance(fields['number'], forms.IntegerField)
+        self.assertIsInstance(fields['float'], forms.FloatField)
+        self.assertIsInstance(fields['decimal'], forms.DecimalField)
+        
+    def test_custom_field(self):
+        config.register(key='email', default='test@test.com', field_class=forms.EmailField)
+
+        form = SettingsForm()
+        fields = form.fields
+
+        self.assertIsInstance(fields['email'], forms.EmailField)
