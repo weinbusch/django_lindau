@@ -11,6 +11,9 @@ class Config(object):
         setting = self.get_setting(key)
         return setting.value
 
+    def save_setting(self, key, value):
+        Settings.objects.filter(key=key).update(value=value)
+
     def register(self, key, default=None, verbose_name=None, field_class=None):
         '''
         Register a setting

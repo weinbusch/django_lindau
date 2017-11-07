@@ -30,4 +30,8 @@ class SettingsForm(forms.Form):
                         "%s does not provide a default field for settings of type '%s'."
                         % (self.__class__.__name__, _type)
                     )
-            self.fields[key] = field_class()
+            self.fields[key] = field_class(required=False)
+
+    def save(self):
+        for key in self.cleaned_data:
+            config.save_setting(key, self.cleaned_data[key])

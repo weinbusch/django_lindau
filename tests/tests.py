@@ -77,3 +77,10 @@ class Form(TestCase):
         fields = form.fields
 
         self.assertIsInstance(fields['email'], forms.EmailField)
+
+    def test_save_fields(self):
+        data = {'number': 10, 'float': 6.66, 'name': 'Max Mustermann', 'decimal': Decimal('7.50')}
+        form = SettingsForm(data=data)
+        form.is_valid()
+        form.save()
+        self.assertEqual(Settings.objects.get(key='name').value, 'Max Mustermann')
