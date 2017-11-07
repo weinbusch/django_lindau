@@ -55,7 +55,7 @@ custom form fields can be specified when registering a setting like this:
 
     config.register(key='bar', default='test@test.com', form_field=forms.EmailField)
 
-# Settings view
+## Settings view
 
 A class-based view is provided in `django_lindau.views.SettingsView` to edit settings. `SettingsView`
 is based on the generic `FormView` and provides an instance of `SettingsForm` in the `form` context variable. By default it uses `django_lindau/settings_form.html` as template, but this can be changed by subclassing `SettingsView`. 
