@@ -1,0 +1,9 @@
+<table>
+    {% for setting in object_list %}
+    <tr>
+        <td>{{ setting.key }}</td>
+        <td>{{ setting.value }}</td>
+        <td>{{ setting.verbose_name }}</td>
+    </tr>
+    {% endfor %}
+</table>

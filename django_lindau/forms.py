@@ -18,7 +18,8 @@ class SettingsForm(forms.Form):
         super().__init__(*args, **kwargs)
         for key in config._registry:
             setting = config.get_setting(key)
-            field_class = config._registry[key]['field_class']
+            options = config._registry[key]
+            field_class = options['field_class']
             if not field_class:
                 # Guess field class from settings value:
                 try:
@@ -30,7 +31,7 @@ class SettingsForm(forms.Form):
                         "%s does not provide a default field for settings of type '%s'."
                         % (self.__class__.__name__, _type)
                     )
-            self.fields[key] = field_class(required=False)
+            self.fields[key] = field_class(required=False, initial=setting.value, label=options['verbose_name'])
 
     def save(self):
         for key in self.cleaned_data:

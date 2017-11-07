@@ -19,5 +19,6 @@ config.register(
 
 config.register(
     key='decimal',
-    default=Decimal('7.50')
+    default=Decimal('7.50'),
+    verbose_name='Dezimalzahl'
 )

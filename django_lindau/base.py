@@ -23,8 +23,8 @@ class Config(object):
                 "Setting with key '%s' not allowed, since it's a method or attribute of '%s'."
                 % (key, self.__class__.__name__)
             )
-        defaults = dict(value=default, verbose_name=verbose_name)
-        self._registry[key] = dict(defaults=defaults, field_class=field_class)
+        defaults = dict(value=default)
+        self._registry[key] = dict(defaults=defaults, verbose_name=verbose_name, field_class=field_class)
 
     def get_setting(self, key):
         if key in self._registry:

@@ -23,13 +23,6 @@ class SettingsModel(TestCase):
         with self.assertRaises(IntegrityError):
             Settings.objects.create(key='foo', value='abracadabra')
 
-    def test_verbose_name(self):
-        obj = Settings.objects.create(key='foo', value='bar')
-        self.assertEqual(obj.verbose_name, 'Foo')
-
-        obj = Settings.objects.create(key='bar', value='foo', verbose_name='Test')
-        self.assertEqual(obj.verbose_name, 'Test')
-
 class ConfigTest(TestCase):
     
     def test_accessing_unregistered_settings(self):
@@ -39,7 +32,7 @@ class ConfigTest(TestCase):
     def test_register_setting(self):
         config.register(key='foo', default='bar', verbose_name='Test')
         self.assertEqual(config.foo, 'bar')
-        self.assertEqual(Settings.objects.get(key='foo').verbose_name, 'Test')
+        self.assertEqual(config._registry['foo']['verbose_name'], 'Test')
         Settings.objects.filter(key='foo').update(value='test')
         self.assertEqual(config.foo, 'test')
 
