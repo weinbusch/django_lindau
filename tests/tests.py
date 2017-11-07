@@ -30,14 +30,8 @@ class SettingsModel(TestCase):
 
 class ConfigTest(TestCase):
     
-    def test_accessing_config_variables(self):
-        Settings.objects.create(key='foo', value=10.53)
-        Settings.objects.create(key='bar', value='abracadabra')
-
-        self.assertEqual(config.foo, 10.53)
-        self.assertEqual(config.bar, 'abracadabra')
-
-        with self.assertRaises(ObjectDoesNotExist):
+    def test_accessing_unregistered_settings(self):
+        with self.assertRaises(ImproperlyConfigured):
             self.assertEqual(config.doesnt_exist, '')
 
     def test_register_setting(self):

@@ -12,7 +12,9 @@ class Config(object):
             defaults = self._registry[key]['defaults']
             setting, created = Settings.objects.get_or_create(key=key, defaults=defaults)
         else:
-            setting = Settings.objects.get(key=key)
+            raise ImproperlyConfigured(
+                "Setting '%s' has not been registered." % (key,)
+            )
         return setting.value
 
     def register(self, key, default=None, verbose_name=None):
