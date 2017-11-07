@@ -1,10 +1,7 @@
-from django.conf.urls import url, include
-from django.views.generic import FormView, ListView
+from django.conf.urls import url
 
-from django_lindau.models import Settings
-from django_lindau.forms import SettingsForm
+from django_lindau.views import SettingsView
 
 urlpatterns = [
-    url(r'^$', FormView.as_view(form_class=SettingsForm, template_name='tests/settings_form.html'), name='index'),
-    url(r'^list$', ListView.as_view(model=Settings), name='list'),
+    url(r'^$', SettingsView.as_view(template_name='tests/settings_form.html', success_url='/'), name='settings'),
 ]

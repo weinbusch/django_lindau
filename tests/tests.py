@@ -1,6 +1,7 @@
 from decimal import Decimal
 
 from django.test import TestCase
+from django.core.urlresolvers import reverse
 from django.db.utils import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist, ImproperlyConfigured
 from django import forms
@@ -76,4 +77,14 @@ class Form(TestCase):
         form = SettingsForm(data=data)
         form.is_valid()
         form.save()
+        self.assertEqual(Settings.objects.get(key='name').value, 'Max Mustermann')
+
+class View(TestCase):
+
+    def test_settings_view(self):
+        response = self.client.get(reverse('settings'))
+        form = response.context['form']
+        self.assertIsInstance(form, SettingsForm)
+
+        response = self.client.post(reverse('settings'), data={'name': 'Max Mustermann'})
         self.assertEqual(Settings.objects.get(key='name').value, 'Max Mustermann')
