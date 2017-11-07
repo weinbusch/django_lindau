@@ -1,6 +1,16 @@
+from decimal import Decimal
+
 from django.core.exceptions import ImproperlyConfigured
+from django import forms
 
 from django_lindau.models import Settings
+
+DEFAULT_FIELDS = {
+    str: forms.CharField,
+    int: forms.IntegerField,
+    float: forms.FloatField,
+    Decimal: forms.DecimalField,
+}
 
 class Config(object):
 
@@ -23,6 +33,9 @@ class Config(object):
                 "Setting with key '%s' not allowed, since it's a method or attribute of '%s'."
                 % (key, self.__class__.__name__)
             )
+        if not field_class:
+            _type = type(default)
+            field_class = DEFAULT_FIELDS[_type]
         defaults = dict(value=default)
         self._registry[key] = dict(defaults=defaults, verbose_name=verbose_name, field_class=field_class)
 
