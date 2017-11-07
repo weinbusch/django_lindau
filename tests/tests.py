@@ -41,8 +41,9 @@ class ConfigTest(TestCase):
             self.assertEqual(config.doesnt_exist, '')
 
     def test_register_setting(self):
-        config.register(key='foo', default='bar')
+        config.register(key='foo', default='bar', verbose_name='Test')
         self.assertEqual(config.foo, 'bar')
+        self.assertEqual(Settings.objects.get(key='foo').verbose_name, 'Test')
         Settings.objects.filter(key='foo').update(value='test')
         self.assertEqual(config.foo, 'test')
 
