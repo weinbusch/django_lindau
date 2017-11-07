@@ -41,9 +41,12 @@ class ConfigTest(TestCase):
         Settings.objects.filter(key='foo').update(value='test')
         self.assertEqual(config.foo, 'test')
 
-        # Cannot register setting 'register' (since it's a method of config)
+        # Cannot register methods or attributes of Config as settings
         with self.assertRaises(ImproperlyConfigured):
             config.register(key='register')
+
+        with self.assertRaises(ImproperlyConfigured):
+            config.register(key='_registry')
 
     def test_registered_settings(self):
         '''
